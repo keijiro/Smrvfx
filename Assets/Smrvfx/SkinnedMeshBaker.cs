@@ -3,12 +3,13 @@ using System.Collections.Generic;
 
 namespace Smrvfx
 {
-    public class SkinnedMeshBaker : MonoBehaviour
+    public sealed class SkinnedMeshBaker : MonoBehaviour
     {
         #region Editable attributes
 
         [SerializeField] SkinnedMeshRenderer _source = null;
         [SerializeField] RenderTexture _positionMap = null;
+        [SerializeField] RenderTexture _velocityMap = null;
         [SerializeField] RenderTexture _normalMap = null;
         [SerializeField] ComputeShader _compute = null;
 
@@ -23,10 +24,12 @@ namespace Smrvfx
         List<Vector3> _positionList = new List<Vector3>();
         List<Vector3> _normalList = new List<Vector3>();
 
-        ComputeBuffer _positionBuffer;
+        ComputeBuffer _positionBuffer1;
+        ComputeBuffer _positionBuffer2;
         ComputeBuffer _normalBuffer;
 
         RenderTexture _tempPositionMap;
+        RenderTexture _tempVelocityMap;
         RenderTexture _tempNormalMap;
 
         #endregion
@@ -43,29 +46,21 @@ namespace Smrvfx
             Destroy(_mesh);
             _mesh = null;
 
-            if (_positionBuffer != null)
-            {
-                _positionBuffer.Dispose();
-                _positionBuffer = null;
-            }
+            Utility.TryDispose(_positionBuffer1);
+            Utility.TryDispose(_positionBuffer2);
+            Utility.TryDispose(_normalBuffer);
 
-            if (_normalBuffer != null)
-            {
-                _normalBuffer.Dispose();
-                _normalBuffer = null;
-            }
+            Utility.TryDestroy(_tempPositionMap);
+            Utility.TryDestroy(_tempVelocityMap);
+            Utility.TryDestroy(_tempNormalMap);
 
-            if (_tempPositionMap != null)
-            {
-                Destroy(_tempPositionMap);
-                _tempPositionMap = null;
-            }
+            _positionBuffer1 = null;
+            _positionBuffer2 = null;
+            _normalBuffer = null;
 
-            if (_tempNormalMap != null)
-            {
-                Destroy(_tempNormalMap);
-                _tempNormalMap = null;
-            }
+            _tempPositionMap = null;
+            _tempVelocityMap = null;
+            _tempNormalMap = null;
         }
 
         void Update()
@@ -79,6 +74,8 @@ namespace Smrvfx
             if (!CheckConsistency()) return;
 
             TransferData();
+
+            Utility.SwapBuffer(ref _positionBuffer1, ref _positionBuffer2);
         }
 
         #endregion
@@ -96,17 +93,15 @@ namespace Smrvfx
             // Release the temporary objects when the size of them don't match
             // the input.
 
-            if (_positionBuffer != null &&
-                _positionBuffer.count != vcount_x3)
+            if (_positionBuffer1 != null &&
+                _positionBuffer1.count != vcount_x3)
             {
-                _positionBuffer.Dispose();
-                _positionBuffer = null;
-            }
-
-            if (_normalBuffer != null &&
-                _normalBuffer.count != vcount_x3)
-            {
+                _positionBuffer1.Dispose();
+                _positionBuffer2.Dispose();
                 _normalBuffer.Dispose();
+
+                _positionBuffer1 = null;
+                _positionBuffer2 = null;
                 _normalBuffer = null;
             }
 
@@ -115,62 +110,51 @@ namespace Smrvfx
                  _tempPositionMap.height != mapHeight))
             {
                 Destroy(_tempPositionMap);
-                _tempPositionMap = null;
-            }
-
-            if (_tempNormalMap != null &&
-                (_tempNormalMap.width != mapWidth ||
-                 _tempNormalMap.height != mapHeight))
-            {
+                Destroy(_tempVelocityMap);
                 Destroy(_tempNormalMap);
+
+                _tempPositionMap = null;
+                _tempVelocityMap = null;
                 _tempNormalMap = null;
             }
 
             // Lazy initialization of temporary objects
 
-            if (_positionBuffer == null)
-                _positionBuffer = new ComputeBuffer(vcount_x3, sizeof(float));
-
-            if (_normalBuffer == null)
+            if (_positionBuffer1 == null)
+            {
+                _positionBuffer1 = new ComputeBuffer(vcount_x3, sizeof(float));
+                _positionBuffer2 = new ComputeBuffer(vcount_x3, sizeof(float));
                 _normalBuffer = new ComputeBuffer(vcount_x3, sizeof(float));
+            }
 
             if (_tempPositionMap == null)
             {
-                _tempPositionMap = new RenderTexture(
-                    _positionMap.width, _positionMap.height, 0,
-                    RenderTextureFormat.ARGBHalf
-                );
-                _tempPositionMap.enableRandomWrite = true;
-                _tempPositionMap.Create();
-            }
-
-            if (_tempNormalMap == null)
-            {
-                _tempNormalMap = new RenderTexture(
-                    _positionMap.width, _positionMap.height, 0,
-                    RenderTextureFormat.ARGBHalf
-                );
-                _tempNormalMap.enableRandomWrite = true;
-                _tempNormalMap.Create();
+                _tempPositionMap = Utility.CreateRenderTexture(mapWidth, mapHeight);
+                _tempVelocityMap = Utility.CreateRenderTexture(mapWidth, mapHeight);
+                _tempNormalMap = Utility.CreateRenderTexture(mapWidth, mapHeight);
             }
 
             // Set data and execute the transfer task.
 
             _compute.SetInt("VertexCount", vcount);
             _compute.SetMatrix("Transform", _source.transform.localToWorldMatrix);
+            _compute.SetFloat("FrameRate", 1 / Time.deltaTime);
 
-            _positionBuffer.SetData(_positionList);
+            _positionBuffer1.SetData(_positionList);
             _normalBuffer.SetData(_normalList);
 
-            _compute.SetBuffer(0, "PositionBuffer", _positionBuffer);
+            _compute.SetBuffer(0, "PositionBuffer", _positionBuffer1);
+            _compute.SetBuffer(0, "OldPositionBuffer", _positionBuffer2);
             _compute.SetBuffer(0, "NormalBuffer", _normalBuffer);
 
             _compute.SetTexture(0, "PositionMap", _tempPositionMap);
+            _compute.SetTexture(0, "VelocityMap", _tempVelocityMap);
             _compute.SetTexture(0, "NormalMap", _tempNormalMap);
 
             _compute.Dispatch(0, mapWidth / 8, mapHeight / 8, 1);
 
             Graphics.CopyTexture(_tempPositionMap, _positionMap);
+            Graphics.CopyTexture(_tempVelocityMap, _velocityMap);
             Graphics.CopyTexture(_tempNormalMap, _normalMap);
         }
 

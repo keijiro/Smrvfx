@@ -807,6 +807,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _source: {fileID: 782649403}
   _positionMap: {fileID: 8400000, guid: 65f21fe1f464bf0f1a1fc991675ee2dc, type: 2}
+  _velocityMap: {fileID: 8400000, guid: 87843e6597188870d8ca42f3136d4930, type: 2}
   _normalMap: {fileID: 8400000, guid: 8da609c92b48024f4b4333f59fd53d44, type: 2}
   _compute: {fileID: 7200000, guid: feda2e5c3aa86f2d4865487ae1f2e229, type: 3}
 --- !u!4 &1474985325
@@ -882,6 +883,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: Beta Optimized
       objectReference: {fileID: 0}
+    - target: {fileID: 13700000, guid: b90c72d29781b2b4b9191291ef2e82ec, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 5de0127aa4b4fcb0bba7d4eba0de3b15, type: 2}
+    - target: {fileID: 13700000, guid: b90c72d29781b2b4b9191291ef2e82ec, type: 3}
+      propertyPath: m_SkinnedMotionVectors
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: b90c72d29781b2b4b9191291ef2e82ec, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -954,10 +963,6 @@ PrefabInstance:
       propertyPath: m_LocalPosition.z
       value: -0.04111284
       objectReference: {fileID: 0}
-    - target: {fileID: 13700000, guid: b90c72d29781b2b4b9191291ef2e82ec, type: 3}
-      propertyPath: m_Materials.Array.data[0]
-      value: 
-      objectReference: {fileID: 2100000, guid: 5de0127aa4b4fcb0bba7d4eba0de3b15, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b90c72d29781b2b4b9191291ef2e82ec, type: 3}
 --- !u!95 &1962086038 stripped
