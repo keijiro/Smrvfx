@@ -1,0 +1,32 @@
+#pragma kernel TransferData
+
+uint VertexCount;
+uint2 MapDimensions;
+float4x4 Transform;
+
+Buffer<float> PositionBuffer;
+Buffer<float> NormalBuffer;
+
+RWTexture2D<float4> PositionMap;
+RWTexture2D<float4> NormalMap;
+
+[numthreads(8, 8, 1)]
+void TransferData(uint2 id : SV_DispatchThreadID)
+{
+    uint i = id.x + id.y * MapDimensions.x % VertexCount;
+
+    float3 position = float3(
+        PositionBuffer[i * 3],
+        PositionBuffer[i * 3 + 1],
+        PositionBuffer[i * 3 + 2]
+    );
+
+    float3 normal = float3(
+        NormalBuffer[i * 3],
+        NormalBuffer[i * 3 + 1],
+        NormalBuffer[i * 3 + 2]
+    );
+
+    PositionMap[id] = mul(Transform, float4(position, 1));
+    NormalMap[id] = mul(Transform, float4(normal, 0));
+}
