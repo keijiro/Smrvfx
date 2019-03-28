@@ -87,11 +87,11 @@ namespace Smrvfx
 
         void TransferData()
         {
+            var mapWidth = _positionMap.width;
+            var mapHeight = _positionMap.height;
+
             var vcount = _positionList.Count;
             var vcount_x3 = vcount * 3;
-
-            _dimensions[0] = _positionMap.width;
-            _dimensions[1] = _positionMap.height;
 
             // Release the temporary objects when the size of them don't match
             // the input.
@@ -111,16 +111,16 @@ namespace Smrvfx
             }
 
             if (_tempPositionMap != null &&
-                (_tempPositionMap.width != _dimensions[0] ||
-                 _tempPositionMap.height != _dimensions[1]))
+                (_tempPositionMap.width != mapWidth ||
+                 _tempPositionMap.height != mapHeight))
             {
                 Destroy(_tempPositionMap);
                 _tempPositionMap = null;
             }
 
             if (_tempNormalMap != null &&
-                (_tempNormalMap.width != _dimensions[0] ||
-                 _tempNormalMap.height != _dimensions[1]))
+                (_tempNormalMap.width != mapWidth ||
+                 _tempNormalMap.height != mapHeight))
             {
                 Destroy(_tempNormalMap);
                 _tempNormalMap = null;
@@ -157,7 +157,6 @@ namespace Smrvfx
             // Set data and execute the transfer task.
 
             _compute.SetInt("VertexCount", vcount);
-            _compute.SetInts("MapDimensions", _dimensions);
             _compute.SetMatrix("Transform", _source.transform.localToWorldMatrix);
 
             _positionBuffer.SetData(_positionList);
@@ -169,7 +168,7 @@ namespace Smrvfx
             _compute.SetTexture(0, "PositionMap", _tempPositionMap);
             _compute.SetTexture(0, "NormalMap", _tempNormalMap);
 
-            _compute.Dispatch(0, _dimensions[0] / 8, _dimensions[0] / 8, 1);
+            _compute.Dispatch(0, mapWidth / 8, mapHeight / 8, 1);
 
             Graphics.CopyTexture(_tempPositionMap, _positionMap);
             Graphics.CopyTexture(_tempNormalMap, _normalMap);
