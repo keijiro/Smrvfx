@@ -177,15 +177,17 @@ namespace Smrvfx
                 _warned = true;
             }
 
-            if (_positionMap.format != RenderTextureFormat.ARGBHalf)
+            if (_positionMap.format != RenderTextureFormat.ARGBHalf &&
+                _positionMap.format != RenderTextureFormat.ARGBFloat)
             {
-                Debug.LogError("Position map format should be ARGBHalf");
+                Debug.LogError("Position map format should be ARGBHalf or ARGBFloat.");
                 _warned = true;
             }
 
-            if (_normalMap.format != RenderTextureFormat.ARGBHalf)
+            if (_normalMap.format != RenderTextureFormat.ARGBHalf &&
+                _normalMap.format != RenderTextureFormat.ARGBFloat)
             {
-                Debug.LogError("Normal map format should be ARGBHalf");
+                Debug.LogError("Normal map format should be ARGBHalf or ARGBFloat.");
                 _warned = true;
             }
 
