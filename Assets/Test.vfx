@@ -578,7 +578,7 @@ VisualEffectResource:
     source: "#pragma kernel CSMain\n#define NB_THREADS_PER_GROUP 64\n#define VFX_USE_POSITION_CURRENT
       1\n#define VFX_USE_PARTICLEID_CURRENT 1\n#define VFX_USE_VELOCITY_CURRENT 1\n#define
       VFX_USE_LIFETIME_CURRENT 1\n#define VFX_USE_SEED_CURRENT 1\n#define VFX_USE_ALIVE_CURRENT
-      1\n#define VFX_USE_AGE_CURRENT 1\n#define VFX_LOCAL_SPACE 1\n#include \"Packages/com.unity.visualeffectgraph/Shaders/RenderPipeline/HDRP/VFXDefines.hlsl\"\n\n\nTexture2D
+      1\n#define VFX_USE_AGE_CURRENT 1\n#define VFX_LOCAL_SPACE 1\n#include \"Packages/com.unity.visualeffectgraph/Shaders/RenderPipeline/LWRP/VFXDefines.hlsl\"\n\n\nTexture2D
       attributeMap_a;\nSamplerState samplerattributeMap_a;\nTexture2D attributeMap_b;\nSamplerState
       samplerattributeMap_b;\n\n\n#include \"Packages/com.unity.visualeffectgraph/Shaders/Common/VFXCommonCompute.cginc\"\n#include
       \"Packages/com.unity.visualeffectgraph/Shaders/VFXCommon.cginc\"\n\n\n\nRWByteAddressBuffer
@@ -654,7 +654,7 @@ VisualEffectResource:
     source: "#pragma kernel CSMain\n#define NB_THREADS_PER_GROUP 64\n#define VFX_USE_POSITION_CURRENT
       1\n#define VFX_USE_VELOCITY_CURRENT 1\n#define VFX_USE_LIFETIME_CURRENT 1\n#define
       VFX_USE_MASS_CURRENT 1\n#define VFX_USE_ALIVE_CURRENT 1\n#define VFX_USE_AGE_CURRENT
-      1\n#define VFX_LOCAL_SPACE 1\n#include \"Packages/com.unity.visualeffectgraph/Shaders/RenderPipeline/HDRP/VFXDefines.hlsl\"\n\n\nCBUFFER_START(parameters)\n
+      1\n#define VFX_LOCAL_SPACE 1\n#include \"Packages/com.unity.visualeffectgraph/Shaders/RenderPipeline/LWRP/VFXDefines.hlsl\"\n\n\nCBUFFER_START(parameters)\n
       \   float4x4 InvFieldTransform_a;\n    float4x4 FieldTransform_a;\n    float
       deltaTime_a;\n    uint3 PADDING_0;\nCBUFFER_END\n\n\n#include \"Packages/com.unity.visualeffectgraph/Shaders/Common/VFXCommonCompute.cginc\"\n#include
       \"Packages/com.unity.visualeffectgraph/Shaders/VFXCommon.cginc\"\n\n\n\nRWByteAddressBuffer
@@ -729,17 +729,17 @@ VisualEffectResource:
       VFX_USE_PIVOTZ_CURRENT 1\n\t\t#define VFX_USE_SIZE_CURRENT 1\n\t\t#define VFX_USE_SCALEX_CURRENT
       1\n\t\t#define VFX_USE_SCALEY_CURRENT 1\n\t\t#define VFX_USE_SCALEZ_CURRENT
       1\n\t\t#define VFX_USE_AGE_CURRENT 1\n\t\t#define IS_TRANSPARENT_PARTICLE 1\n\t\t#define
-      VFX_BLENDMODE_ADD 1\n\t\t\n\t\t\n\t\t\n\t\t#define VFX_LOCAL_SPACE 1\n\t\t#include
-      \"Packages/com.unity.visualeffectgraph/Shaders/RenderPipeline/HDRP/VFXDefines.hlsl\"\n\t\t\n\n\t\tCBUFFER_START(parameters)\n\t\t
+      VFX_BLENDMODE_ADD 1\n\t\t\n\t\t\n\t\t\n\t\t\n\t\t#define VFX_LOCAL_SPACE 1\n\t\t#include
+      \"Packages/com.unity.visualeffectgraph/Shaders/RenderPipeline/LWRP/VFXDefines.hlsl\"\n\t\t\n\n\t\tCBUFFER_START(parameters)\n\t\t
       \   float uniform_b;\n\t\t    uint3 PADDING_0;\n\t\tCBUFFER_END\n\t\tTexture2D
       mainTexture;\n\t\tSamplerState samplermainTexture;\n\t\t\n\n\t\t\n\t\t#define
       VFX_NEEDS_COLOR_INTERPOLATOR (VFX_USE_COLOR_CURRENT || VFX_USE_ALPHA_CURRENT)\n\t\t\n\t\tByteAddressBuffer
       attributeBuffer;\t\n\t\t\n\t\t#if VFX_HAS_INDIRECT_DRAW\n\t\tStructuredBuffer<uint>
       indirectBuffer;\t\n\t\t#endif\t\n\t\t\n\t\t#if USE_DEAD_LIST_COUNT\n\t\tByteAddressBuffer
       deadListCount;\n\t\t#endif\n\t\t\n\t\tCBUFFER_START(outputParams)\n\t\t\tfloat
-      nbMax;\n\t\t\tfloat systemSeed;\n\t\tCBUFFER_END\n\t\t\n\t\tENDHLSL\n\t\t\n\n\t\t\n\t\t//
-      Forward pass\n\t\tPass\n\t\t{\t\t\n\t\t\tTags { \"LightMode\"=\"ForwardOnly\"
-      }\n\t\t\t\n\t\t\tHLSLPROGRAM\n\t\t\t#pragma target 4.5\n\t\t\t\n\t\t\n\t\t\tstruct
+      nbMax;\n\t\t\tfloat systemSeed;\n\t\tCBUFFER_END\n\t\t\n\t\tENDHLSL\n\t\t\n\n\t\t//
+      Forward pass\n\t\tPass\n\t\t{\t\t\n\t\t\tTags { \"LightMode\"=\"LightweightForward\"
+      }\n\t\t\t\n\t\t\tHLSLPROGRAM\n\t\t\t#pragma target 4.5\n\t\t\t#pragma multi_compile_fog\n\t\t\n\t\t\tstruct
       ps_input\n\t\t\t{\n\t\t\t\tfloat4 pos : SV_POSITION;\n\t\t\t\t#if USE_FLIPBOOK_INTERPOLATION\n\t\t\t\tfloat4
       uv : TEXCOORD0;\n\t\t\t\t#else\n\t\t\t\tfloat2 uv : TEXCOORD0;\t\n\t\t\t\t#endif\n\t\t\t\t#if
       VFX_NEEDS_COLOR_INTERPOLATOR\n\t\t\t\tnointerpolation float4 color : COLOR0;\n\t\t\t\t#endif\n\t\t\t\t#if
@@ -756,7 +756,7 @@ VisualEffectResource:
       VFX_NEEDS_POSWS_INTERPOLATOR\n\t\t#define VFX_VARYING_POSWS posWS\n\t\t#endif\n\t\t\t\t\n\t\t\t#if
       !(defined(VFX_VARYING_PS_INPUTS) && defined(VFX_VARYING_POSCS))\n\t\t\t#error
       VFX_VARYING_PS_INPUTS, VFX_VARYING_POSCS and VFX_VARYING_UV must be defined.\n\t\t\t#endif\n\t\t\t\n\t\t\t#include
-      \"Packages/com.unity.visualeffectgraph/Shaders/RenderPipeline/HDRP/VFXCommon.cginc\"\n\t\t\t#include
+      \"Packages/com.unity.visualeffectgraph/Shaders/RenderPipeline/LWRP/VFXCommon.cginc\"\n\t\t\t#include
       \"Packages/com.unity.visualeffectgraph/Shaders/VFXCommon.cginc\"\n\t\t\t\n\n\t\t\tvoid
       SetAttribute_FDD06EC7(inout float3 color, float3 Color) /*attribute:color Composition:Overwrite
       Source:Slot Random:Off channels:XYZ */\n\t\t\t{\n\t\t\t    color = Color;\n\t\t\t}\n\t\t\tvoid
@@ -824,7 +824,7 @@ VisualEffectResource:
       (float)0.6);\n\t\t\t\t    float tmp_bl = min(tmp_bj, (float)2);\n\t\t\t\t    float
       tmp_bm = tmp_bl - (float)0.6;\n\t\t\t\t    float tmp_bo = tmp_bm / (float)1.4;\n\t\t\t\t
       \   float4 tmp_bp = float4(tmp_bo, tmp_bo, tmp_bo, tmp_bo);\n\t\t\t\t    float4
-      tmp_bq = float4(67.79352,13.13278,3.549399,0) * tmp_bp;\n\t\t\t\t    float tmp_br
+      tmp_bq = float4(16,2.635294,0.5647059,0) * tmp_bp;\n\t\t\t\t    float tmp_br
       = tmp_bq[0];\n\t\t\t\t    float tmp_bs = tmp_bq[1];\n\t\t\t\t    float tmp_bt
       = tmp_bq[2];\n\t\t\t\t    float3 tmp_bu = float3(tmp_br, tmp_bs, tmp_bt);\n\t\t\t\t
       \   SetAttribute_FA15ADAA( /*inout */color, tmp_bu);\n\t\t\t\t}\n\t\t\t\tOrient_6(
@@ -1108,7 +1108,7 @@ VisualEffectResource:
       m_Vector4f:
         m_Array:
         - m_ExpressionIndex: 10
-          m_Value: {x: 67.79352, y: 13.132775, z: 3.549399, w: 0}
+          m_Value: {x: 16, y: 2.6352942, z: 0.5647059, w: 0}
       m_Uint:
         m_Array:
         - m_ExpressionIndex: 18
@@ -1126,9 +1126,9 @@ VisualEffectResource:
         - m_ExpressionIndex: 6
           m_Value:
             serializedVersion: 2
-            key0: {r: 3.2111173, g: 3.8499782, b: 3.8499782, a: 1}
-            key1: {r: 0.8264406, g: 0.9899845, b: 0.9899845, a: 1}
-            key2: {r: 0.7482645, g: 0.8962264, b: 0.8962264, a: 0}
+            key0: {r: 1.441504, g: 1.7207954, b: 1.7207954, a: 1}
+            key1: {r: 0.18431371, g: 1, b: 0.75076467, a: 1}
+            key2: {r: 0.10588236, g: 0.4164717, b: 0.57254905, a: 0}
             key3: {r: 0, g: 0, b: 0, a: 0}
             key4: {r: 0, g: 0, b: 0, a: 0}
             key5: {r: 0, g: 0, b: 0, a: 0}
@@ -1136,7 +1136,7 @@ VisualEffectResource:
             key7: {r: 0, g: 0, b: 0, a: 0}
             ctime0: 0
             ctime1: 11565
-            ctime2: 60716
+            ctime2: 47224
             ctime3: 65535
             ctime4: 0
             ctime5: 0
@@ -2784,7 +2784,7 @@ MonoBehaviour:
       m_Type:
         m_SerializableType: UnityEngine.Gradient, UnityEngine.CoreModule, Version=0.0.0.0,
           Culture=neutral, PublicKeyToken=null
-      m_SerializableObject: '{"colorKeys":[{"color":{"r":3.2111172676086427,"g":3.84997820854187,"b":3.84997820854187,"a":1.0},"time":0.0},{"color":{"r":0.8264405727386475,"g":0.9899845123291016,"b":0.9899845123291016,"a":1.0},"time":0.1764705926179886},{"color":{"r":0.748264491558075,"g":0.8962264060974121,"b":0.8962264060974121,"a":1.0},"time":0.9264667630195618},{"color":{"r":0.0,"g":0.0,"b":0.0,"a":1.0},"time":1.0}],"alphaKeys":[{"alpha":1.0,"time":0.0},{"alpha":1.0,"time":1.0}],"gradientMode":0}'
+      m_SerializableObject: '{"colorKeys":[{"color":{"r":1.4415040016174317,"g":1.7207953929901124,"b":1.7207953929901124,"a":1.0},"time":0.0},{"color":{"r":0.18431371450424195,"g":1.0,"b":0.7507646679878235,"a":1.0},"time":0.1764705926179886},{"color":{"r":0.10588236153125763,"g":0.4164716899394989,"b":0.572549045085907,"a":1.0},"time":0.7205920219421387},{"color":{"r":0.0,"g":0.0,"b":0.0,"a":1.0},"time":1.0}],"alphaKeys":[{"alpha":1.0,"time":0.0},{"alpha":1.0,"time":1.0}],"gradientMode":0}'
     m_Space: 2147483647
   m_Property:
     name: gradient
@@ -5005,7 +5005,7 @@ MonoBehaviour:
       m_Type:
         m_SerializableType: UnityEngine.Color, UnityEngine.CoreModule, Version=0.0.0.0,
           Culture=neutral, PublicKeyToken=null
-      m_SerializableObject: '{"r":67.79351806640625,"g":13.13277530670166,"b":3.549398899078369,"a":0.0}'
+      m_SerializableObject: '{"r":16.0,"g":2.635294198989868,"b":0.5647059082984924,"a":0.0}'
     m_Space: 2147483647
   m_Property:
     name: 
