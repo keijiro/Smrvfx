@@ -4,9 +4,9 @@ uint VertexCount;
 float4x4 Transform;
 float FrameRate;
 
-Buffer<float> PositionBuffer;
-Buffer<float> OldPositionBuffer;
-Buffer<float> NormalBuffer;
+StructuredBuffer<float> PositionBuffer;
+StructuredBuffer<float> OldPositionBuffer;
+StructuredBuffer<float> NormalBuffer;
 
 RWTexture2D<float4> PositionMap;
 RWTexture2D<float4> VelocityMap;
