@@ -1,6 +1,6 @@
 {
   "dependencies": {
-    "com.unity.package-manager-ui": "2.1.1",
+    "com.unity.package-manager-ui": "2.1.2",
     "com.unity.render-pipelines.high-definition": "5.10.0-preview",
     "com.unity.timeline": "1.0.0",
     "com.unity.visualeffectgraph": "5.10.0-preview",
