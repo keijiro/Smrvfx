@@ -18,6 +18,7 @@ namespace Smrvfx
         #region Temporary objects
 
         Mesh _mesh;
+        Matrix4x4 _previousTransform = Matrix4x4.identity;
 
         int[] _dimensions = new int[2];
 
@@ -76,6 +77,7 @@ namespace Smrvfx
             TransferData();
 
             Utility.SwapBuffer(ref _positionBuffer1, ref _positionBuffer2);
+            _previousTransform = _source.transform.localToWorldMatrix;
         }
 
         #endregion
@@ -138,6 +140,7 @@ namespace Smrvfx
 
             _compute.SetInt("VertexCount", vcount);
             _compute.SetMatrix("Transform", _source.transform.localToWorldMatrix);
+            _compute.SetMatrix("OldTransform", _previousTransform);
             _compute.SetFloat("FrameRate", 1 / Time.deltaTime);
 
             _positionBuffer1.SetData(_positionList);

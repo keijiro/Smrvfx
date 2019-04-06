@@ -2,6 +2,7 @@
 
 uint VertexCount;
 float4x4 Transform;
+float4x4 OldTransform;
 float FrameRate;
 
 StructuredBuffer<float> PositionBuffer;
@@ -47,9 +48,9 @@ void TransferData(uint2 id : SV_DispatchThreadID)
         NormalBuffer[i * 3 + 2]
     );
 
-    p0 = mul(Transform, float4(p0, 1)).xyz;
-    p1 = mul(Transform, float4(p1, 1)).xyz;
-    n1 = mul(Transform, float4(n1, 0)).xyz;
+    p0 = mul(OldTransform, float4(p0, 1)).xyz;
+    p1 = mul(   Transform, float4(p1, 1)).xyz;
+    n1 = mul(   Transform, float4(n1, 0)).xyz;
 
     PositionMap[id] = float4(p1, 1);
     VelocityMap[id] = float4((p1 - p0) * FrameRate, 0);
