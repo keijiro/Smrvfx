@@ -131,9 +131,9 @@ namespace Smrvfx
 
             if (_tempPositionMap == null)
             {
-                _tempPositionMap = Utility.CreateRenderTexture(mapWidth, mapHeight);
-                _tempVelocityMap = Utility.CreateRenderTexture(mapWidth, mapHeight);
-                _tempNormalMap = Utility.CreateRenderTexture(mapWidth, mapHeight);
+                _tempPositionMap = Utility.CreateRenderTexture(_positionMap);
+                _tempVelocityMap = Utility.CreateRenderTexture(_positionMap);
+                _tempNormalMap = Utility.CreateRenderTexture(_positionMap);
             }
 
             // Set data and execute the transfer task.

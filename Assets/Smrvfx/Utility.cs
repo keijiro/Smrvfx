@@ -4,9 +4,9 @@ namespace Smrvfx
 {
     internal static class Utility
     {
-        public static RenderTexture CreateRenderTexture(int width, int height)
+        public static RenderTexture CreateRenderTexture(RenderTexture source)
         {
-            var rt = new RenderTexture(width, height, 0, RenderTextureFormat.ARGBHalf);
+            var rt = new RenderTexture(source.width, source.height, 0, source.format);
             rt.enableRandomWrite = true;
             rt.Create();
             return rt;
