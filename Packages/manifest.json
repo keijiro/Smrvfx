@@ -6,7 +6,6 @@
     "com.unity.visualeffectgraph": "5.16.1-preview",
     "jp.keijiro.beta": "https://github.com/keijiro/jp.keijiro.beta.git",
     "jp.keijiro.cmu-mocap": "https://github.com/keijiro/CMUMocap.git#upm",
-    "jp.keijiro.klak": "https://github.com/keijiro/Klak.git#upm",
     "com.unity.modules.animation": "1.0.0",
     "com.unity.modules.audio": "1.0.0",
     "com.unity.modules.director": "1.0.0",
@@ -28,10 +27,6 @@
     },
     "jp.keijiro.cmu-mocap": {
       "hash": "8fda0c1770156a047ed44868c5132748960b01cf",
-      "revision": "upm"
-    },
-    "jp.keijiro.klak": {
-      "hash": "998c115201969984019639126bc8d0001c79d243",
       "revision": "upm"
     }
   }
