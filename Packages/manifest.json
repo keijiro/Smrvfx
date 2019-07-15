@@ -1,9 +1,9 @@
 {
   "dependencies": {
     "com.unity.package-manager-ui": "2.1.2",
-    "com.unity.render-pipelines.high-definition": "5.10.0-preview",
+    "com.unity.render-pipelines.high-definition": "5.16.1-preview",
     "com.unity.timeline": "1.0.0",
-    "com.unity.visualeffectgraph": "5.10.0-preview",
+    "com.unity.visualeffectgraph": "5.16.1-preview",
     "jp.keijiro.beta": "https://github.com/keijiro/jp.keijiro.beta.git",
     "jp.keijiro.cmu-mocap": "https://github.com/keijiro/CMUMocap.git#upm",
     "jp.keijiro.klak": "https://github.com/keijiro/Klak.git#upm",
