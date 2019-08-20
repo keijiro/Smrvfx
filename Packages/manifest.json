@@ -1,24 +1,19 @@
 {
   "dependencies": {
-    "com.unity.package-manager-ui": "2.1.2",
-    "com.unity.render-pipelines.high-definition": "5.16.1-preview",
-    "com.unity.timeline": "1.0.0",
-    "com.unity.visualeffectgraph": "5.16.1-preview",
+    "com.unity.package-manager-ui": "2.2.0",
+    "com.unity.render-pipelines.high-definition": "6.9.1-preview",
+    "com.unity.timeline": "1.1.0",
     "jp.keijiro.beta": "https://github.com/keijiro/jp.keijiro.beta.git",
     "jp.keijiro.cmu-mocap": "https://github.com/keijiro/CMUMocap.git#upm",
     "com.unity.modules.animation": "1.0.0",
-    "com.unity.modules.audio": "1.0.0",
     "com.unity.modules.director": "1.0.0",
     "com.unity.modules.imageconversion": "1.0.0",
     "com.unity.modules.imgui": "1.0.0",
-    "com.unity.modules.jsonserialize": "1.0.0",
     "com.unity.modules.particlesystem": "1.0.0",
     "com.unity.modules.physics": "1.0.0",
+    "com.unity.modules.physics2d": "1.0.0",
     "com.unity.modules.ui": "1.0.0",
-    "com.unity.modules.unitywebrequest": "1.0.0",
-    "com.unity.modules.video": "1.0.0",
-    "com.unity.modules.vr": "1.0.0",
-    "com.unity.modules.xr": "1.0.0"
+    "com.unity.modules.vr": "1.0.0"
   },
   "lock": {
     "jp.keijiro.beta": {
