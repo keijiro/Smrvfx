@@ -1,10 +1,19 @@
 {
+  "scopedRegistries": [
+    {
+      "name": "Keijiro",
+      "url": "https://registry.npmjs.com",
+      "scopes": [
+        "jp.keijiro"
+      ]
+    }
+  ],
   "dependencies": {
     "com.unity.package-manager-ui": "2.2.0",
     "com.unity.render-pipelines.high-definition": "6.9.1-preview",
     "com.unity.timeline": "1.1.0",
-    "jp.keijiro.beta": "https://github.com/keijiro/jp.keijiro.beta.git",
-    "jp.keijiro.cmu-mocap": "https://github.com/keijiro/CMUMocap.git#upm",
+    "jp.keijiro.beta": "1.0.0",
+    "jp.keijiro.cmu-mocap": "1.0.0",
     "com.unity.modules.animation": "1.0.0",
     "com.unity.modules.director": "1.0.0",
     "com.unity.modules.imageconversion": "1.0.0",
@@ -14,15 +23,5 @@
     "com.unity.modules.physics2d": "1.0.0",
     "com.unity.modules.ui": "1.0.0",
     "com.unity.modules.vr": "1.0.0"
-  },
-  "lock": {
-    "jp.keijiro.beta": {
-      "hash": "01208e373fccf53416e68dfc1afb775d0c3219f4",
-      "revision": "HEAD"
-    },
-    "jp.keijiro.cmu-mocap": {
-      "hash": "8fda0c1770156a047ed44868c5132748960b01cf",
-      "revision": "upm"
-    }
   }
 }
