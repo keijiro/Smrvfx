@@ -8,10 +8,16 @@ namespace Smrvfx
         #region Editable attributes
 
         [SerializeField] SkinnedMeshRenderer _source = null;
-        [SerializeField] RenderTexture _positionMap = null;
-        [SerializeField] RenderTexture _velocityMap = null;
-        [SerializeField] RenderTexture _normalMap = null;
         [SerializeField] ComputeShader _compute = null;
+
+        #endregion
+
+        #region Public properties
+
+        public Texture PositionMap => _positionMap;
+        public Texture VelocityMap => _velocityMap;
+        public Texture NormalMap => _normalMap;
+        public int VertexCount => _mesh != null ? _mesh.vertexCount : 0;
 
         #endregion
 
@@ -20,8 +26,6 @@ namespace Smrvfx
         Mesh _mesh;
         Matrix4x4 _previousTransform = Matrix4x4.identity;
 
-        int[] _dimensions = new int[2];
-
         List<Vector3> _positionList = new List<Vector3>();
         List<Vector3> _normalList = new List<Vector3>();
 
@@ -29,9 +33,9 @@ namespace Smrvfx
         ComputeBuffer _positionBuffer2;
         ComputeBuffer _normalBuffer;
 
-        RenderTexture _tempPositionMap;
-        RenderTexture _tempVelocityMap;
-        RenderTexture _tempNormalMap;
+        RenderTexture _positionMap;
+        RenderTexture _velocityMap;
+        RenderTexture _normalMap;
 
         #endregion
 
@@ -40,106 +44,85 @@ namespace Smrvfx
         void Start()
         {
             _mesh = new Mesh();
+
+            _source.BakeMesh(_mesh);
+
+            var vcount = _mesh.vertexCount;
+            var vcount_x3 = vcount * 3;
+
+            _positionBuffer1 = new ComputeBuffer(vcount_x3, sizeof(float));
+            _positionBuffer2 = new ComputeBuffer(vcount_x3, sizeof(float));
+            _normalBuffer = new ComputeBuffer(vcount_x3, sizeof(float));
+
+            var width = 256;
+            var height = (((vcount + width - 1) / width + 7) / 8) * 8;
+
+            _positionMap = NewFloatRenderTexture(width, height);
+            _velocityMap = NewHalfRenderTexture(width, height);
+            _normalMap = NewHalfRenderTexture(width, height);
         }
 
         void OnDestroy()
         {
             Destroy(_mesh);
-            _mesh = null;
 
-            Utility.TryDispose(_positionBuffer1);
-            Utility.TryDispose(_positionBuffer2);
-            Utility.TryDispose(_normalBuffer);
+            _positionBuffer1.Dispose();
+            _positionBuffer2.Dispose();
+            _normalBuffer.Dispose();
 
-            Utility.TryDestroy(_tempPositionMap);
-            Utility.TryDestroy(_tempVelocityMap);
-            Utility.TryDestroy(_tempNormalMap);
-
-            _positionBuffer1 = null;
-            _positionBuffer2 = null;
-            _normalBuffer = null;
-
-            _tempPositionMap = null;
-            _tempVelocityMap = null;
-            _tempNormalMap = null;
+            Destroy(_positionMap);
+            Destroy(_velocityMap);
+            Destroy(_normalMap);
         }
 
         void Update()
         {
-            if (_source == null) return;
-
             _source.BakeMesh(_mesh);
+
             _mesh.GetVertices(_positionList);
             _mesh.GetNormals(_normalList);
 
-            if (!CheckConsistency()) return;
-
             TransferData();
+            SwapPositionBuffers();
 
-            Utility.SwapBuffer(ref _positionBuffer1, ref _positionBuffer2);
             _previousTransform = _source.transform.localToWorldMatrix;
         }
 
         #endregion
 
-        #region Private methods
+        #region Render texture utilities
+
+        static RenderTexture NewRenderTexture
+          (int width, int height, RenderTextureFormat format)
+        {
+            var rt = new RenderTexture(width, height, 0, format);
+            rt.enableRandomWrite = true;
+            rt.Create();
+            return rt;
+        }
+
+        static RenderTexture NewHalfRenderTexture(int width, int height)
+          => NewRenderTexture(width, height, RenderTextureFormat.ARGBHalf);
+
+        static RenderTexture NewFloatRenderTexture(int width, int height)
+          => NewRenderTexture(width, height, RenderTextureFormat.ARGBFloat);
+
+        #endregion
+
+        #region Buffer operations
 
         void TransferData()
         {
-            var mapWidth = _positionMap.width;
-            var mapHeight = _positionMap.height;
+            var width = _positionMap.width;
+            var height = _positionMap.height;
 
             var vcount = _positionList.Count;
             var vcount_x3 = vcount * 3;
 
-            // Release the temporary objects when the size of them don't match
-            // the input.
-
-            if (_positionBuffer1 != null &&
-                _positionBuffer1.count != vcount_x3)
-            {
-                _positionBuffer1.Dispose();
-                _positionBuffer2.Dispose();
-                _normalBuffer.Dispose();
-
-                _positionBuffer1 = null;
-                _positionBuffer2 = null;
-                _normalBuffer = null;
-            }
-
-            if (_tempPositionMap != null &&
-                (_tempPositionMap.width != mapWidth ||
-                 _tempPositionMap.height != mapHeight))
-            {
-                Destroy(_tempPositionMap);
-                Destroy(_tempVelocityMap);
-                Destroy(_tempNormalMap);
-
-                _tempPositionMap = null;
-                _tempVelocityMap = null;
-                _tempNormalMap = null;
-            }
-
-            // Lazy initialization of temporary objects
-
-            if (_positionBuffer1 == null)
-            {
-                _positionBuffer1 = new ComputeBuffer(vcount_x3, sizeof(float));
-                _positionBuffer2 = new ComputeBuffer(vcount_x3, sizeof(float));
-                _normalBuffer = new ComputeBuffer(vcount_x3, sizeof(float));
-            }
-
-            if (_tempPositionMap == null)
-            {
-                _tempPositionMap = Utility.CreateRenderTexture(_positionMap);
-                _tempVelocityMap = Utility.CreateRenderTexture(_positionMap);
-                _tempNormalMap = Utility.CreateRenderTexture(_positionMap);
-            }
-
-            // Set data and execute the transfer task.
+            var l2w = _source.transform.localToWorldMatrix;
 
             _compute.SetInt("VertexCount", vcount);
-            _compute.SetMatrix("Transform", _source.transform.localToWorldMatrix);
+            _compute.SetMatrix("Transform", l2w);
             _compute.SetMatrix("OldTransform", _previousTransform);
             _compute.SetFloat("FrameRate", 1 / Time.deltaTime);
 
@@ -150,51 +133,18 @@ namespace Smrvfx
             _compute.SetBuffer(0, "OldPositionBuffer", _positionBuffer2);
             _compute.SetBuffer(0, "NormalBuffer", _normalBuffer);
 
-            _compute.SetTexture(0, "PositionMap", _tempPositionMap);
-            _compute.SetTexture(0, "VelocityMap", _tempVelocityMap);
-            _compute.SetTexture(0, "NormalMap", _tempNormalMap);
+            _compute.SetTexture(0, "PositionMap", _positionMap);
+            _compute.SetTexture(0, "VelocityMap", _velocityMap);
+            _compute.SetTexture(0, "NormalMap", _normalMap);
 
-            _compute.Dispatch(0, mapWidth / 8, mapHeight / 8, 1);
-
-            Graphics.CopyTexture(_tempPositionMap, _positionMap);
-            Graphics.CopyTexture(_tempVelocityMap, _velocityMap);
-            Graphics.CopyTexture(_tempNormalMap, _normalMap);
+            _compute.Dispatch(0, width / 8, height / 8, 1);
         }
 
-        bool _warned;
-
-        bool CheckConsistency()
+        void SwapPositionBuffers()
         {
-            if (_warned) return false;
-
-            if (_positionMap.width % 8 != 0 || _positionMap.height % 8 != 0)
-            {
-                Debug.LogError("Position map dimensions should be a multiple of 8.");
-                _warned = true;
-            }
-
-            if (_normalMap.width != _positionMap.width ||
-                _normalMap.height != _positionMap.height)
-            {
-                Debug.LogError("Position/normal map dimensions should match.");
-                _warned = true;
-            }
-
-            if (_positionMap.format != RenderTextureFormat.ARGBHalf &&
-                _positionMap.format != RenderTextureFormat.ARGBFloat)
-            {
-                Debug.LogError("Position map format should be ARGBHalf or ARGBFloat.");
-                _warned = true;
-            }
-
-            if (_normalMap.format != RenderTextureFormat.ARGBHalf &&
-                _normalMap.format != RenderTextureFormat.ARGBFloat)
-            {
-                Debug.LogError("Normal map format should be ARGBHalf or ARGBFloat.");
-                _warned = true;
-            }
-
-            return !_warned;
+            var temp = _positionBuffer1;
+            _positionBuffer1 = _positionBuffer2;
+            _positionBuffer2 = temp;
         }
 
         #endregion

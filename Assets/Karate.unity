@@ -171,6 +171,20 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!115 &566232890
+MonoScript:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: 
+  serializedVersion: 5
+  m_Script: 
+  m_DefaultReferences: {}
+  m_Icon: {fileID: 0}
+  m_ExecutionOrder: 0
+  m_ClassName: VFXSkinnedMeshBinder
+  m_Namespace: Smrvfx
 --- !u!1 &584009124
 GameObject:
   m_ObjectHideFlags: 0
@@ -573,6 +587,8 @@ GameObject:
   - component: {fileID: 778064508}
   - component: {fileID: 778064507}
   - component: {fileID: 778064506}
+  - component: {fileID: 778064510}
+  - component: {fileID: 778064509}
   m_Layer: 0
   m_Name: Quads
   m_TagString: Untagged
@@ -653,7 +669,10 @@ VisualEffect:
     m_Gradient:
       m_Array: []
     m_NamedObject:
-      m_Array: []
+      m_Array:
+      - m_Value: {fileID: 0}
+        m_Name: PositionMap
+        m_Overridden: 1
     m_Bool:
       m_Array: []
 --- !u!4 &778064508
@@ -670,6 +689,45 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 9
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &778064509
+MonoBehaviour:
+  m_ObjectHideFlags: 2
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 778064505}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 566232890}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _positionMapProperty:
+    m_Name: PositionMap
+  _bindVelocityMap: 0
+  _velocityMapProperty:
+    m_Name: VelocityMap
+  _bindNormalMap: 0
+  _normalMapProperty:
+    m_Name: NormalMap
+  _bindVertexCount: 0
+  _vertexCountProperty:
+    m_Name: VertexCount
+  Target: {fileID: 1474985324}
+--- !u!114 &778064510
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 778064505}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cdafc37f32b176349b1684c4455b98e9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_ExecuteInEditor: 1
+  m_Bindings: []
+  m_VisualEffect: {fileID: 778064507}
 --- !u!137 &782649403 stripped
 SkinnedMeshRenderer:
   m_CorrespondingSourceObject: {fileID: 13700000, guid: b90c72d29781b2b4b9191291ef2e82ec,
@@ -755,7 +813,21 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &851057019
+--- !u!115 &820300143
+MonoScript:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: 
+  serializedVersion: 5
+  m_Script: 
+  m_DefaultReferences: {}
+  m_Icon: {fileID: 0}
+  m_ExecutionOrder: 0
+  m_ClassName: VFXSkinnedMeshBinder
+  m_Namespace: Smrvfx
+--- !u!1 &906804680
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -763,9 +835,42 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 851057022}
-  - component: {fileID: 851057021}
-  - component: {fileID: 851057020}
+  - component: {fileID: 906804681}
+  m_Layer: 0
+  m_Name: Light Pivot
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &906804681
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 906804680}
+  m_LocalRotation: {x: 0.26041883, y: -0.4768585, z: 0.15035288, w: 0.8259431}
+  m_LocalPosition: {x: 0, y: 0.5, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 768218038}
+  m_Father: {fileID: 0}
+  m_RootOrder: 5
+  m_LocalEulerAnglesHint: {x: 35, y: -60, z: 0}
+--- !u!1 &963999397
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 963999398}
+  - component: {fileID: 963999400}
+  - component: {fileID: 963999399}
+  - component: {fileID: 963999402}
+  - component: {fileID: 963999403}
   m_Layer: 0
   m_Name: Particles
   m_TagString: Untagged
@@ -773,13 +878,27 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!73398921 &851057020
+--- !u!4 &963999398
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 963999397}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 8
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!73398921 &963999399
 VFXRenderer:
   m_ObjectHideFlags: 2
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 851057019}
+  m_GameObject: {fileID: 963999397}
   m_Enabled: 1
   m_CastShadows: 0
   m_ReceiveShadows: 0
@@ -812,13 +931,13 @@ VFXRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!2083052967 &851057021
+--- !u!2083052967 &963999400
 VisualEffect:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 851057019}
+  m_GameObject: {fileID: 963999397}
   m_Enabled: 1
   m_Asset: {fileID: 8926484042661614526, guid: fcba9cf5611a35f3fb81b15575c40e77, type: 3}
   m_InitialEventName: OnPlay
@@ -845,54 +964,55 @@ VisualEffect:
     m_Gradient:
       m_Array: []
     m_NamedObject:
-      m_Array: []
+      m_Array:
+      - m_Value: {fileID: 0}
+        m_Name: PositionMap
+        m_Overridden: 1
+      - m_Value: {fileID: 0}
+        m_Name: VelocityMap
+        m_Overridden: 1
     m_Bool:
       m_Array: []
---- !u!4 &851057022
-Transform:
+--- !u!114 &963999402
+MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 851057019}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 8
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &906804680
-GameObject:
-  m_ObjectHideFlags: 0
+  m_GameObject: {fileID: 963999397}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cdafc37f32b176349b1684c4455b98e9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_ExecuteInEditor: 1
+  m_Bindings:
+  - {fileID: 963999403}
+  m_VisualEffect: {fileID: 963999400}
+--- !u!114 &963999403
+MonoBehaviour:
+  m_ObjectHideFlags: 2
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 906804681}
-  m_Layer: 0
-  m_Name: Light Pivot
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &906804681
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 906804680}
-  m_LocalRotation: {x: 0.26041883, y: -0.4768585, z: 0.15035288, w: 0.8259431}
-  m_LocalPosition: {x: 0, y: 0.5, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children:
-  - {fileID: 768218038}
-  m_Father: {fileID: 0}
-  m_RootOrder: 5
-  m_LocalEulerAnglesHint: {x: 35, y: -60, z: 0}
+  m_GameObject: {fileID: 963999397}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 820300143}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _positionMapProperty:
+    m_Name: PositionMap
+  _bindVelocityMap: 1
+  _velocityMapProperty:
+    m_Name: VelocityMap
+  _bindNormalMap: 0
+  _normalMapProperty:
+    m_Name: NormalMap
+  _bindVertexCount: 0
+  _vertexCountProperty:
+    m_Name: VertexCount
+  Target: {fileID: 1474985324}
 --- !u!1 &1452013104
 GameObject:
   m_ObjectHideFlags: 0
@@ -904,6 +1024,8 @@ GameObject:
   - component: {fileID: 1452013107}
   - component: {fileID: 1452013106}
   - component: {fileID: 1452013105}
+  - component: {fileID: 1452013109}
+  - component: {fileID: 1452013108}
   m_Layer: 0
   m_Name: Lines
   m_TagString: Untagged
@@ -984,7 +1106,13 @@ VisualEffect:
     m_Gradient:
       m_Array: []
     m_NamedObject:
-      m_Array: []
+      m_Array:
+      - m_Value: {fileID: 0}
+        m_Name: PositionMap
+        m_Overridden: 1
+      - m_Value: {fileID: 0}
+        m_Name: VelocityMap
+        m_Overridden: 1
     m_Bool:
       m_Array: []
 --- !u!4 &1452013107
@@ -1001,6 +1129,45 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 10
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1452013108
+MonoBehaviour:
+  m_ObjectHideFlags: 2
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1452013104}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 566232890}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _positionMapProperty:
+    m_Name: PositionMap
+  _bindVelocityMap: 1
+  _velocityMapProperty:
+    m_Name: VelocityMap
+  _bindNormalMap: 0
+  _normalMapProperty:
+    m_Name: NormalMap
+  _bindVertexCount: 0
+  _vertexCountProperty:
+    m_Name: VertexCount
+  Target: {fileID: 1474985324}
+--- !u!114 &1452013109
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1452013104}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cdafc37f32b176349b1684c4455b98e9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_ExecuteInEditor: 1
+  m_Bindings: []
+  m_VisualEffect: {fileID: 1452013106}
 --- !u!1 &1474985323
 GameObject:
   m_ObjectHideFlags: 0
@@ -1031,9 +1198,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _source: {fileID: 782649403}
-  _positionMap: {fileID: 8400000, guid: 65f21fe1f464bf0f1a1fc991675ee2dc, type: 2}
-  _velocityMap: {fileID: 8400000, guid: 87843e6597188870d8ca42f3136d4930, type: 2}
-  _normalMap: {fileID: 8400000, guid: 8da609c92b48024f4b4333f59fd53d44, type: 2}
   _compute: {fileID: 7200000, guid: feda2e5c3aa86f2d4865487ae1f2e229, type: 3}
 --- !u!4 &1474985325
 Transform:
