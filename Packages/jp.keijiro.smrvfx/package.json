@@ -1,6 +1,9 @@
 {
     "author": "Keijiro Takahashi",
-    "dependencies": { "com.unity.visualeffectgraph": "7.3.1" },
+    "dependencies": {
+      "com.unity.visualeffectgraph": "7.3.1",
+      "org.nuget.system.memory": "4.5.3"
+    },
     "description": "Skinned mesh renderer source extension for Visual Effect Graph",
     "displayName": "Smrvfx",
     "keywords": [ "unity" ],
