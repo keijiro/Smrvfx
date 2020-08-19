@@ -515,6 +515,7 @@ MonoBehaviour:
   showAdditionalSettings: 0
   m_AreaLightEmissiveMeshShadowCastingMode: 0
   m_AreaLightEmissiveMeshMotionVectorGenerationMode: 0
+  m_AreaLightEmissiveMeshLayer: -1
 --- !u!108 &768218041
 Light:
   m_ObjectHideFlags: 0
@@ -1197,7 +1198,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a8be8853279617ea196652fe43520855, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _source: {fileID: 782649403}
+  _sources:
+  - {fileID: 782649403}
   _compute: {fileID: 7200000, guid: feda2e5c3aa86f2d4865487ae1f2e229, type: 3}
 --- !u!4 &1474985325
 Transform:
