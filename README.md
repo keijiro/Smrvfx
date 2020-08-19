@@ -31,7 +31,7 @@ To the `scopedRegistries` section:
 To the `dependencies` section:
 
 ```
-"jp.keijiro.smrvfx": "1.1.0"
+"jp.keijiro.smrvfx": "1.1.1"
 ```
 
 After changes, the manifest file should look like below:
@@ -46,6 +46,6 @@ After changes, the manifest file should look like below:
     }
   ],
   "dependencies": {
-    "jp.keijiro.smrvfx": "1.1.0",
+    "jp.keijiro.smrvfx": "1.1.1",
 ...
 ```
