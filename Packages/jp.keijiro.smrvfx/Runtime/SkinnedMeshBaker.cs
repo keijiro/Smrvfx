@@ -76,7 +76,7 @@ public sealed class SkinnedMeshBaker : MonoBehaviour
         Destroy(_normalMap);
     }
 
-    void Update()
+    void LateUpdate()
     {
         if (VertexCount == 0) return;
 
