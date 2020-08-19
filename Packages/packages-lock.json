@@ -87,41 +87,8 @@
       "depth": 0,
       "source": "embedded",
       "dependencies": {
-        "com.unity.visualeffectgraph": "7.3.1",
-        "org.nuget.system.memory": "4.5.3"
+        "com.unity.visualeffectgraph": "7.3.1"
       }
-    },
-    "org.nuget.system.buffers": {
-      "version": "4.4.0",
-      "depth": 2,
-      "source": "registry",
-      "dependencies": {},
-      "url": "https://unitynuget-registry.azurewebsites.net"
-    },
-    "org.nuget.system.memory": {
-      "version": "4.5.3",
-      "depth": 1,
-      "source": "registry",
-      "dependencies": {
-        "org.nuget.system.buffers": "4.4.0",
-        "org.nuget.system.numerics.vectors": "4.4.0",
-        "org.nuget.system.runtime.compilerservices.unsafe": "4.5.2"
-      },
-      "url": "https://unitynuget-registry.azurewebsites.net"
-    },
-    "org.nuget.system.numerics.vectors": {
-      "version": "4.4.0",
-      "depth": 2,
-      "source": "registry",
-      "dependencies": {},
-      "url": "https://unitynuget-registry.azurewebsites.net"
-    },
-    "org.nuget.system.runtime.compilerservices.unsafe": {
-      "version": "4.5.2",
-      "depth": 2,
-      "source": "registry",
-      "dependencies": {},
-      "url": "https://unitynuget-registry.azurewebsites.net"
     },
     "com.unity.modules.animation": {
       "version": "1.0.0",

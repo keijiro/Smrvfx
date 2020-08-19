@@ -1,7 +1,6 @@
 using UnityEngine;
 using System.Collections.Generic;
 using System.Linq;
-using System;
 
 namespace Smrvfx {
 
@@ -19,16 +18,15 @@ public sealed class SkinnedMeshBaker : MonoBehaviour
     public Texture PositionMap => _positionMap;
     public Texture VelocityMap => _velocityMap;
     public Texture NormalMap => _normalMap;
-    public int VertexCount => _vertexCount;
+    public int VertexCount { get; private set; }
 
     #endregion
 
     #region Temporary objects
 
-    Bundle[] _bundles;
-    int _vertexCount;
-
     (Matrix4x4 current, Matrix4x4 previous) _rootMatrix;
+
+    Mesh _mesh;
 
     ComputeBuffer _positionBuffer1;
     ComputeBuffer _positionBuffer2;
@@ -46,19 +44,20 @@ public sealed class SkinnedMeshBaker : MonoBehaviour
     {
         if (_sources == null || _sources.Length == 0) return;
 
-        _bundles = _sources.Select(smr => new Bundle(smr)).ToArray();
-        _vertexCount = _bundles.Select(b => b.BakedMesh.vertexCount).Sum();
+        VertexCount = _sources.Select(smr => smr.sharedMesh.vertexCount).Sum();
 
         var l2w = _sources[0].transform.localToWorldMatrix;
         _rootMatrix = (l2w, l2w);
 
-        var vcount_x3 = _vertexCount * 3;
+        _mesh = new Mesh();
+
+        var vcount_x3 = VertexCount * 3;
         _positionBuffer1 = new ComputeBuffer(vcount_x3, sizeof(float));
         _positionBuffer2 = new ComputeBuffer(vcount_x3, sizeof(float));
         _normalBuffer = new ComputeBuffer(vcount_x3, sizeof(float));
 
         var width = 256;
-        var height = (((_vertexCount + width - 1) / width + 7) / 8) * 8;
+        var height = (((VertexCount + width - 1) / width + 7) / 8) * 8;
         _positionMap = RenderTextureUtil.AllocateFloat(width, height);
         _velocityMap = RenderTextureUtil.AllocateHalf(width, height);
         _normalMap = RenderTextureUtil.AllocateHalf(width, height);
@@ -66,9 +65,7 @@ public sealed class SkinnedMeshBaker : MonoBehaviour
 
     void OnDestroy()
     {
-        if (_bundles == null) return;
-
-        foreach (ref var bundle in _bundles.AsSpan()) bundle.Dispose();
+        Destroy(_mesh);
 
         _positionBuffer1.Dispose();
         _positionBuffer2.Dispose();
@@ -81,15 +78,14 @@ public sealed class SkinnedMeshBaker : MonoBehaviour
 
     void Update()
     {
-        if (_bundles == null) return;
+        if (VertexCount == 0) return;
 
         // Current transform matrix
         _rootMatrix.current = _sources[0].transform.localToWorldMatrix;
 
         // Bake the sources into the buffers.
         var offset = 0;
-        foreach (ref var bundle in _bundles.AsSpan())
-            offset += Bake(bundle, offset);
+        foreach (var source in _sources) offset += Bake(source, offset);
 
         // ComputeBuffer -> RenderTexture
         TransferData();
@@ -109,14 +105,13 @@ public sealed class SkinnedMeshBaker : MonoBehaviour
     List<Vector3> _positionList = new List<Vector3>();
     List<Vector3> _normalList = new List<Vector3>();
 
-    int Bake(in Bundle bundle, int offset)
+    int Bake(SkinnedMeshRenderer source, int offset)
     {
-        bundle.Bake();
+        source.BakeMesh(_mesh);
 
-        bundle.BakedMesh.GetVertices(_positionList);
-        bundle.BakedMesh.GetNormals(_normalList);
-
-        var vcount = bundle.BakedMesh.vertexCount;
+        var vcount = _mesh.vertexCount;
+        _mesh.GetVertices(_positionList);
+        _mesh.GetNormals(_normalList);
 
         _positionBuffer1.SetData(_positionList, 0, offset, vcount);
         _normalBuffer.SetData(_normalList, 0, offset, vcount);
@@ -130,7 +125,7 @@ public sealed class SkinnedMeshBaker : MonoBehaviour
 
     void TransferData()
     {
-        var vcount = _vertexCount;
+        var vcount = VertexCount;
         var vcount_x3 = vcount * 3;
 
         _compute.SetInt("VertexCount", vcount);
