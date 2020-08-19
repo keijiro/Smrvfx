@@ -100,7 +100,34 @@ public sealed class SkinnedMeshBaker : MonoBehaviour
 
     #endregion
 
-    #region Mesh bake function with the old Mesh API
+    #region Mesh bake function with the new/old Mesh API
+
+#if UNITY_2020_1_OR_NEWER
+
+    int Bake(SkinnedMeshRenderer source, int offset)
+    {
+        source.BakeMesh(_mesh);
+
+        using (var dataArray = Mesh.AcquireReadOnlyMeshData(_mesh))
+        {
+            var data = dataArray[0];
+            var vcount = data.vertexCount;
+
+            using (var pos = MemoryUtil.TempJobArray<Vector3>(vcount))
+            using (var nrm = MemoryUtil.TempJobArray<Vector3>(vcount))
+            {
+                data.GetVertices(pos);
+                data.GetNormals(nrm);
+
+                _positionBuffer1.SetData(pos, 0, offset, vcount);
+                _normalBuffer.SetData(nrm, 0, offset, vcount);
+
+                return vcount;
+            }
+        }
+    }
+
+#else
 
     List<Vector3> _positionList = new List<Vector3>();
     List<Vector3> _normalList = new List<Vector3>();
@@ -118,6 +145,8 @@ public sealed class SkinnedMeshBaker : MonoBehaviour
 
         return vcount;
     }
+
+#endif
 
     #endregion
 
