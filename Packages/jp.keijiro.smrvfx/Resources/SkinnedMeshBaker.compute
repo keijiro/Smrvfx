@@ -1,17 +1,32 @@
 #pragma kernel TransferData
 
-uint VertexCount;
+struct SamplePoint
+{
+    uint4 indices;
+    float4 weights;
+};
+
+uint SampleCount;
 float4x4 Transform;
 float4x4 OldTransform;
 float FrameRate;
 
-StructuredBuffer<float> PositionBuffer;
-StructuredBuffer<float> OldPositionBuffer;
-StructuredBuffer<float> NormalBuffer;
+StructuredBuffer<SamplePoint> SamplePoints;
+StructuredBuffer<float3> PositionBuffer;
+StructuredBuffer<float3> OldPositionBuffer;
+StructuredBuffer<float3> NormalBuffer;
 
 RWTexture2D<float4> PositionMap;
 RWTexture2D<float4> VelocityMap;
 RWTexture2D<float4> NormalMap;
+
+// Point sampling function
+float3 SampleBuffer(StructuredBuffer<float3> buffer, SamplePoint sp)
+{
+    return buffer[sp.indices.x] * sp.weights.x + 
+           buffer[sp.indices.y] * sp.weights.y + 
+           buffer[sp.indices.z] * sp.weights.z;
+}
 
 // Hash function from H. Schechter & R. Bridson, goo.gl/RXiKaH
 uint Hash(uint s)
@@ -28,25 +43,12 @@ uint Hash(uint s)
 [numthreads(8, 8, 1)]
 void TransferData(uint2 id : SV_DispatchThreadID)
 {
-    uint i = Hash(id.x + id.y * 65536) % VertexCount;
+    uint si = Hash(id.x + id.y * 65536) % SampleCount;
+    SamplePoint sp = SamplePoints[si];
 
-    float3 p1 = float3(
-        PositionBuffer[i * 3],
-        PositionBuffer[i * 3 + 1],
-        PositionBuffer[i * 3 + 2]
-    );
-
-    float3 p0 = float3(
-        OldPositionBuffer[i * 3],
-        OldPositionBuffer[i * 3 + 1],
-        OldPositionBuffer[i * 3 + 2]
-    );
-
-    float3 n1 = float3(
-        NormalBuffer[i * 3],
-        NormalBuffer[i * 3 + 1],
-        NormalBuffer[i * 3 + 2]
-    );
+    float3 p1 = SampleBuffer(PositionBuffer, sp);
+    float3 p0 = SampleBuffer(OldPositionBuffer, sp);
+    float3 n1 = normalize(SampleBuffer(NormalBuffer, sp));
 
     p0 = mul(OldTransform, float4(p0, 1)).xyz;
     p1 = mul(   Transform, float4(p1, 1)).xyz;

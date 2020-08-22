@@ -11,7 +11,7 @@
   "dependencies": {
     "com.unity.render-pipelines.high-definition": "8.2.0",
     "com.unity.timeline": "1.4.2",
-    "jp.keijiro.beta": "1.0.1",
+    "jp.keijiro.beta": "1.0.2",
     "jp.keijiro.cmu-mocap": "1.0.0",
     "com.unity.modules.imageconversion": "1.0.0",
     "com.unity.modules.uielements": "1.0.0",

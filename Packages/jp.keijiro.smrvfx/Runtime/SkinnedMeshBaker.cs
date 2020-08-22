@@ -1,33 +1,13 @@
 using UnityEngine;
-using System.Collections.Generic;
 using System.Linq;
 
 namespace Smrvfx {
 
-public sealed class SkinnedMeshBaker : MonoBehaviour
+public sealed partial class SkinnedMeshBaker : MonoBehaviour
 {
-    #region Editable attributes
-
-    [SerializeField] SkinnedMeshRenderer [] _sources = null;
-    [SerializeField, HideInInspector] ComputeShader _compute = null;
-
-    #endregion
-
-    #region Public properties
-
-    public Texture PositionMap => _positionMap;
-    public Texture VelocityMap => _velocityMap;
-    public Texture NormalMap => _normalMap;
-    public int VertexCount { get; private set; }
-
-    #endregion
-
     #region Temporary objects
 
-    (Matrix4x4 current, Matrix4x4 previous) _rootMatrix;
-
-    Mesh _mesh;
-
+    ComputeBuffer _samplePoints;
     ComputeBuffer _positionBuffer1;
     ComputeBuffer _positionBuffer2;
     ComputeBuffer _normalBuffer;
@@ -36,37 +16,54 @@ public sealed class SkinnedMeshBaker : MonoBehaviour
     RenderTexture _velocityMap;
     RenderTexture _normalMap;
 
+    (Matrix4x4 current, Matrix4x4 previous) _rootMatrix;
+    Mesh _tempMesh;
+
     #endregion
 
     #region MonoBehaviour implementation
 
     void Start()
     {
-        if (_sources == null || _sources.Length == 0) return;
+        if (!IsValid) return;
 
-        VertexCount = _sources.Select(smr => smr.sharedMesh.vertexCount).Sum();
+        using (var mesh = new CombinedMesh(_sources))
+        {
+            // Sample point generation
+            using (var points = SamplePointGenerator.Generate
+                                  (mesh, _pointCount))
+            {
+                _samplePoints = new ComputeBuffer
+                  (_pointCount, SamplePoint.SizeInByte);
+                _samplePoints.SetData(points);
+            }
 
-        var l2w = _sources[0].transform.localToWorldMatrix;
-        _rootMatrix = (l2w, l2w);
+            // Intermediate buffer allocation
+            var vcount = mesh.Vertices.Length;
+            var float3size = sizeof(float) * 3;
+            _positionBuffer1 = new ComputeBuffer(vcount, float3size);
+            _positionBuffer2 = new ComputeBuffer(vcount, float3size);
+            _normalBuffer = new ComputeBuffer(vcount, float3size);
+        }
 
-        _mesh = new Mesh();
-
-        var vcount_x3 = VertexCount * 3;
-        _positionBuffer1 = new ComputeBuffer(vcount_x3, sizeof(float));
-        _positionBuffer2 = new ComputeBuffer(vcount_x3, sizeof(float));
-        _normalBuffer = new ComputeBuffer(vcount_x3, sizeof(float));
-
+        // Destination render texture allocation
         var width = 256;
-        var height = (((VertexCount + width - 1) / width + 7) / 8) * 8;
+        var height = (((_pointCount + width - 1) / width + 7) / 8) * 8;
         _positionMap = RenderTextureUtil.AllocateFloat(width, height);
         _velocityMap = RenderTextureUtil.AllocateHalf(width, height);
         _normalMap = RenderTextureUtil.AllocateHalf(width, height);
+
+        // Etc.
+        var l2w = _sources[0].transform.localToWorldMatrix;
+        _rootMatrix = (l2w, l2w);
+        _tempMesh = new Mesh();
     }
 
     void OnDestroy()
     {
-        Destroy(_mesh);
+        if (!IsValid) return;
 
+        _samplePoints.Dispose();
         _positionBuffer1.Dispose();
         _positionBuffer2.Dispose();
         _normalBuffer.Dispose();
@@ -74,18 +71,20 @@ public sealed class SkinnedMeshBaker : MonoBehaviour
         Destroy(_positionMap);
         Destroy(_velocityMap);
         Destroy(_normalMap);
+
+        Destroy(_tempMesh);
     }
 
     void LateUpdate()
     {
-        if (VertexCount == 0) return;
+        if (!IsValid) return;
 
         // Current transform matrix
         _rootMatrix.current = _sources[0].transform.localToWorldMatrix;
 
         // Bake the sources into the buffers.
         var offset = 0;
-        foreach (var source in _sources) offset += Bake(source, offset);
+        foreach (var source in _sources) offset += BakeSource(source, offset);
 
         // ComputeBuffer -> RenderTexture
         TransferData();
@@ -100,15 +99,13 @@ public sealed class SkinnedMeshBaker : MonoBehaviour
 
     #endregion
 
-    #region Mesh bake function with the new/old Mesh API
+    #region Private methods
 
-#if UNITY_2020_1_OR_NEWER
-
-    int Bake(SkinnedMeshRenderer source, int offset)
+    int BakeSource(SkinnedMeshRenderer source, int offset)
     {
-        source.BakeMesh(_mesh);
+        source.BakeMesh(_tempMesh);
 
-        using (var dataArray = Mesh.AcquireReadOnlyMeshData(_mesh))
+        using (var dataArray = Mesh.AcquireReadOnlyMeshData(_tempMesh))
         {
             var data = dataArray[0];
             var vcount = data.vertexCount;
@@ -127,41 +124,14 @@ public sealed class SkinnedMeshBaker : MonoBehaviour
         }
     }
 
-#else
-
-    List<Vector3> _positionList = new List<Vector3>();
-    List<Vector3> _normalList = new List<Vector3>();
-
-    int Bake(SkinnedMeshRenderer source, int offset)
-    {
-        source.BakeMesh(_mesh);
-
-        var vcount = _mesh.vertexCount;
-        _mesh.GetVertices(_positionList);
-        _mesh.GetNormals(_normalList);
-
-        _positionBuffer1.SetData(_positionList, 0, offset, vcount);
-        _normalBuffer.SetData(_normalList, 0, offset, vcount);
-
-        return vcount;
-    }
-
-#endif
-
-    #endregion
-
-    #region Buffer operations
-
     void TransferData()
     {
-        var vcount = VertexCount;
-        var vcount_x3 = vcount * 3;
-
-        _compute.SetInt("VertexCount", vcount);
+        _compute.SetInt("SampleCount", _pointCount);
         _compute.SetMatrix("Transform", _rootMatrix.current);
         _compute.SetMatrix("OldTransform", _rootMatrix.previous);
         _compute.SetFloat("FrameRate", 1 / Time.deltaTime);
 
+        _compute.SetBuffer(0, "SamplePoints", _samplePoints);
         _compute.SetBuffer(0, "PositionBuffer", _positionBuffer1);
         _compute.SetBuffer(0, "OldPositionBuffer", _positionBuffer2);
         _compute.SetBuffer(0, "NormalBuffer", _normalBuffer);

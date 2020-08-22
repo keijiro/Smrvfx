@@ -1,7 +1,14 @@
 using UnityEngine;
 using Unity.Collections;
+using Unity.Mathematics;
 
 namespace Smrvfx {
+
+static class MathUtil
+{
+    public static float TriangleArea(float3 v1, float3 v2, float3 v3)
+      => math.length(math.cross(v2 - v1, v3 - v1)) / 2;
+}
 
 static class MemoryUtil
 {

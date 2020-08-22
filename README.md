@@ -10,6 +10,11 @@ mesh] as a particle source in a [visual effect graph].
 [skinned mesh]: https://docs.unity3d.com/Manual/class-SkinnedMeshRenderer.html
 [visual effect graph]: https://unity.com/visual-effect-graph
 
+System Requirements
+-------------------
+
+- Unity 2020.1
+
 How To Install
 --------------
 
@@ -31,7 +36,7 @@ To the `scopedRegistries` section:
 To the `dependencies` section:
 
 ```
-"jp.keijiro.smrvfx": "1.1.2"
+"jp.keijiro.smrvfx": "1.1.3"
 ```
 
 After changes, the manifest file should look like below:
@@ -46,6 +51,6 @@ After changes, the manifest file should look like below:
     }
   ],
   "dependencies": {
-    "jp.keijiro.smrvfx": "1.1.2",
+    "jp.keijiro.smrvfx": "1.1.3",
 ...
 ```
