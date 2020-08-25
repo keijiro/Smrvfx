@@ -86,7 +86,7 @@ static class SamplePointGenerator
             var rnd = new Random(39208); // Meaningless magic number
             rnd.NextUInt4();             // Warming up
 
-            var areaPerSample = TotalArea / Output.Length;
+            var areaPerSample = TotalArea / (Output.Length - 0.5f);
 
             var acc = 0.0f;
             var offs = 0;
