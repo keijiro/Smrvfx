@@ -19,6 +19,8 @@ public sealed partial class SkinnedMeshBaker : MonoBehaviour
     (Matrix4x4 current, Matrix4x4 previous) _rootMatrix;
     Mesh _tempMesh;
 
+    Bounds _bounds;
+
     #endregion
 
     #region MonoBehaviour implementation
@@ -95,6 +97,11 @@ public sealed partial class SkinnedMeshBaker : MonoBehaviour
 
         // Transform matrix history
         _rootMatrix.previous = _rootMatrix.current;
+
+        // Update bounds
+        _bounds = _sources[0].bounds;
+        for (int i = 1; i < _sources.Length; ++i)
+            _bounds.Encapsulate(_sources[i].bounds);
     }
 
     #endregion

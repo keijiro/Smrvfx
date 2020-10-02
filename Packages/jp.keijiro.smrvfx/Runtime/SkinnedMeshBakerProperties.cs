@@ -26,6 +26,7 @@ public sealed partial class SkinnedMeshBaker : MonoBehaviour
     public Texture VelocityMap => _velocityMap;
     public Texture NormalMap => _normalMap;
     public int VertexCount => _pointCount;
+    public Bounds Bounds => _bounds;
 
     #endregion
 
