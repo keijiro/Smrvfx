@@ -5,10 +5,6 @@ Uncharted Limbo Collective's additions
 - Corrected transformation matrices when **multiple** Skinned Mesh Renderers are used as input, by applying an `IJobParallelFor` job on the vertices before these are sent to their respective ComputeBuffer. Inside this job, the vertices of each SMR are multiplied by each SMR's `localToWorldMatrix`. A valid alternative would be to apply the transformation inside the Compute Shader, saving some CPU cycles.
 - Exposed the global "root" transformation matrix as a separate reference, instead of always using the first source.
 
-
-[skinned mesh]: https://docs.unity3d.com/Manual/class-SkinnedMeshRenderer.html
-[visual effect graph]: https://unity.com/visual-effect-graph
-
 ---
 ---  
 
