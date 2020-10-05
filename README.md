@@ -10,7 +10,7 @@ mesh] as a particle source in a [visual effect graph].
 [skinned mesh]: https://docs.unity3d.com/Manual/class-SkinnedMeshRenderer.html
 [visual effect graph]: https://unity.com/visual-effect-graph
 
-Additions to Keijiro's version
+Uncharted Limbo's additions to Keijiro's version
 -------------------
 
 
