@@ -55,7 +55,14 @@ public sealed partial class SkinnedMeshBaker : MonoBehaviour
         _normalMap = RenderTextureUtil.AllocateHalf(width, height);
 
         // Etc.
-        var l2w = _sources[0].transform.localToWorldMatrix;
+        //--------------------------------------------------------------
+        // Uncharted Limbo-Changed
+        //--------------------------------------------------------------
+        // Added a separate root transformation object, instead of using the first source
+        var l2w = GlobalTransformationMatrix;
+        // var l2w = _sources[0].transform.localToWorldMatrix;
+        //--------------------------------------------------------------
+
         _rootMatrix = (l2w, l2w);
         _tempMesh = new Mesh();
     }
@@ -81,7 +88,13 @@ public sealed partial class SkinnedMeshBaker : MonoBehaviour
         if (!IsValid) return;
 
         // Current transform matrix
-        _rootMatrix.current = _sources[0].transform.localToWorldMatrix;
+        //--------------------------------------------------------------
+        // Uncharted Limbo-Changed
+        //--------------------------------------------------------------
+        // Added a separate root transformation object, instead of using the first source
+        _rootMatrix.current = GlobalTransformationMatrix;
+        //_rootMatrix.current = _sources[0].transform.localToWorldMatrix;
+        //--------------------------------------------------------------
 
         // Bake the sources into the buffers.
         var offset = 0;

@@ -15,11 +15,28 @@ public sealed partial class SkinnedMeshBaker : MonoBehaviour
         get => _sources;
         set => _sources = value;
     }
+
+    public Matrix4x4 GlobalTransformationMatrix
+    {
+        get
+        {
+            if (root == null)
+                return Matrix4x4.identity;
+
+            return root.localToWorldMatrix;
+        }
+    }
+
     #endregion
     //--------------------------------------------------------------
 
     #region Editor-only property
-
+    //--------------------------------------------------------------
+    // Uncharted Limbo-Added
+    //--------------------------------------------------------------
+    // Added a separate root transformation object, instead of using the first source
+    [SerializeField] Transform  root;
+    //--------------------------------------------------------------
     [SerializeField] SkinnedMeshRenderer [] _sources = null;
     [SerializeField] int _pointCount = 65536;
 
