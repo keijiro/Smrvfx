@@ -4,6 +4,20 @@ namespace Smrvfx {
 
 public sealed partial class SkinnedMeshBaker : MonoBehaviour
 {
+    //--------------------------------------------------------------
+    // Uncharted Limbo-Added
+    //--------------------------------------------------------------
+    // Exposed the _sources field to external scripts
+    #region Public properties
+
+    public SkinnedMeshRenderer[] Sources
+    {
+        get => _sources;
+        set => _sources = value;
+    }
+    #endregion
+    //--------------------------------------------------------------
+
     #region Editor-only property
 
     [SerializeField] SkinnedMeshRenderer [] _sources = null;

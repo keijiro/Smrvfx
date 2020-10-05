@@ -26,8 +26,12 @@ class CombinedMesh : System.IDisposable
     public CombinedMesh(IEnumerable<Mesh> meshes)
       => Initialize(meshes.ToArray());
 
+    //----------------------------------------------------------------------    // Uncharted Limbo-Changed
+    //----------------------------------------------------------------------
+    // The Skinned Mesh Renderers' transformation matrices are also passed
     public CombinedMesh(IEnumerable<SkinnedMeshRenderer> sources)
-      => Initialize(sources.Select(smr => smr.sharedMesh).ToArray());
+      => Initialize(sources.Select(smr => smr.sharedMesh).ToArray(), sources.Select(smr => smr.localToWorldMatrix).ToArray());
+    //----------------------------------------------------------------------
 
     #endregion
 
@@ -44,7 +48,11 @@ class CombinedMesh : System.IDisposable
 
     #region Private methods
 
-    void Initialize(Mesh[] meshes)
+    //----------------------------------------------------------------------    // Uncharted Limbo-Changed
+    //----------------------------------------------------------------------
+    // Can optionally pass a matrix array
+    void Initialize(Mesh[] meshes, Matrix4x4[] matrices = null)
+    //--------------------------------------------------------------------------
     {
         // Managed mesh array -> Read-only mesh data array
         using (var dataArray = Mesh.AcquireReadOnlyMeshData(meshes))
@@ -80,6 +88,17 @@ class CombinedMesh : System.IDisposable
                 var iarray = Indices.GetSubArray(ioffs, icount);
 
                 data.GetVertices(varray.Reinterpret<Vector3>());
+
+                //--------------------------------------------------------------
+                // Uncharted Limbo-Added
+                //--------------------------------------------------------------
+                // Transform vertices on Initialization, if matrix array is provided
+                if (matrices != null)
+                {
+                    JobUtil.TransformVertices(varray ,matrices[i]);
+                }
+                //--------------------------------------------------------------
+
                 ConcatenateIndices(data, iarray, voffs);
 
                 voffs += vcount;

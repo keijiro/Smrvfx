@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Linq;
+using Unity.Mathematics;
 
 namespace Smrvfx {
 
@@ -115,6 +116,13 @@ public sealed partial class SkinnedMeshBaker : MonoBehaviour
             {
                 data.GetVertices(pos);
                 data.GetNormals(nrm);
+
+                //--------------------------------------------------------------
+                // Uncharted Limbo-Added
+                //--------------------------------------------------------------
+                // The vertices are transformed by the source's transformation matrix
+                JobUtil.TransformVertices(pos.Reinterpret<float3>(),source.localToWorldMatrix );
+                //--------------------------------------------------------------
 
                 _positionBuffer1.SetData(pos, 0, offset, vcount);
                 _normalBuffer.SetData(nrm, 0, offset, vcount);
