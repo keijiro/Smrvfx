@@ -10,9 +10,9 @@ mesh] as a particle source in a [visual effect graph].
 [skinned mesh]: https://docs.unity3d.com/Manual/class-SkinnedMeshRenderer.html
 [visual effect graph]: https://unity.com/visual-effect-graph
 
-Uncharted Limbo's additions to Keijiro's version
+Uncharted Limbo's additions
 -------------------
-
+- Corrected transformation matrices when **multiple** Skinned Mesh Renderers are used as input, by applying an `IJobParallelFor` job on the vertices NativeArray before these are sent to their respective ComputeBuffer.
 
 System Requirements
 -------------------
