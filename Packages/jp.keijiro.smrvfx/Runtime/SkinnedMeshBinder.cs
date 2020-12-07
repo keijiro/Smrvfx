@@ -57,6 +57,8 @@ namespace Smrvfx
 
         public override void UpdateBinding(VisualEffect component)
         {
+            if (Target.PositionMap == null) return;
+
             component.SetTexture(_positionMapProperty, Target.PositionMap);
 
             if (_bindVelocityMap)
