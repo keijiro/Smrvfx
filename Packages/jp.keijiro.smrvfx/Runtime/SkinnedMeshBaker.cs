@@ -3,9 +3,10 @@ using System.Linq;
 
 namespace Smrvfx {
 
+[ExecuteInEditMode]
 public sealed partial class SkinnedMeshBaker : MonoBehaviour
 {
-    #region Temporary objects
+    #region Internal objects
 
     ComputeBuffer _samplePoints;
     ComputeBuffer _positionBuffer1;
@@ -23,10 +24,44 @@ public sealed partial class SkinnedMeshBaker : MonoBehaviour
 
     #region MonoBehaviour implementation
 
-    void Start()
+    void OnDisable()
+      => DisposeInternals();
+
+    void OnDestroy()
+      => DisposeInternals();
+
+    void LateUpdate()
     {
         if (!IsValid) return;
 
+        // Lazy initialization
+        if (_tempMesh == null) InitializeInternals();
+
+        // Current transform matrix
+        _rootMatrix.current = _sources[0].transform.localToWorldMatrix;
+
+        // Bake the sources into the buffers.
+        var offset = 0;
+        foreach (var source in _sources)
+            offset += BakeSource(source, offset);
+
+        // ComputeBuffer -> RenderTexture
+        TransferData();
+
+        // Position buffer swapping
+        (_positionBuffer1, _positionBuffer2)
+          = (_positionBuffer2, _positionBuffer1);
+
+        // Transform matrix history
+        _rootMatrix.previous = _rootMatrix.current;
+    }
+
+    #endregion
+
+    #region Private methods
+
+    void InitializeInternals()
+    {
         using (var mesh = new CombinedMesh(_sources))
         {
             // Sample point generation
@@ -53,53 +88,41 @@ public sealed partial class SkinnedMeshBaker : MonoBehaviour
         _velocityMap = RenderTextureUtil.AllocateHalf(width, height);
         _normalMap = RenderTextureUtil.AllocateHalf(width, height);
 
-        // Etc.
+        // Root matrix
         var l2w = _sources[0].transform.localToWorldMatrix;
         _rootMatrix = (l2w, l2w);
+
+        // Temporary mesh object
         _tempMesh = new Mesh();
+        _tempMesh.hideFlags = HideFlags.DontSave;
     }
 
-    void OnDestroy()
+    void DisposeInternals()
     {
-        if (!IsValid) return;
+        _samplePoints?.Dispose();
+        _samplePoints = null;
 
-        _samplePoints.Dispose();
-        _positionBuffer1.Dispose();
-        _positionBuffer2.Dispose();
-        _normalBuffer.Dispose();
+        _positionBuffer1?.Dispose();
+        _positionBuffer1 = null;
 
-        Destroy(_positionMap);
-        Destroy(_velocityMap);
-        Destroy(_normalMap);
+        _positionBuffer2?.Dispose();
+        _positionBuffer2 = null;
 
-        Destroy(_tempMesh);
+        _normalBuffer?.Dispose();
+        _normalBuffer = null;
+
+        ObjectUtil.Destroy(_positionMap);
+        _positionMap = null;
+
+        ObjectUtil.Destroy(_velocityMap);
+        _velocityMap = null;
+
+        ObjectUtil.Destroy(_normalMap);
+        _normalMap = null;
+
+        ObjectUtil.Destroy(_tempMesh);
+        _tempMesh = null;
     }
-
-    void LateUpdate()
-    {
-        if (!IsValid) return;
-
-        // Current transform matrix
-        _rootMatrix.current = _sources[0].transform.localToWorldMatrix;
-
-        // Bake the sources into the buffers.
-        var offset = 0;
-        foreach (var source in _sources) offset += BakeSource(source, offset);
-
-        // ComputeBuffer -> RenderTexture
-        TransferData();
-
-        // Position buffer swapping
-        (_positionBuffer1, _positionBuffer2)
-          = (_positionBuffer2, _positionBuffer1);
-
-        // Transform matrix history
-        _rootMatrix.previous = _rootMatrix.current;
-    }
-
-    #endregion
-
-    #region Private methods
 
     int BakeSource(SkinnedMeshRenderer source, int offset)
     {

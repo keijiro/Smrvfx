@@ -10,6 +10,18 @@ static class MathUtil
       => math.length(math.cross(v2 - v1, v3 - v1)) / 2;
 }
 
+static class ObjectUtil
+{
+    public static void Destroy(Object o)
+    {
+        if (o == null) return;
+        if (Application.isPlaying)
+            Object.Destroy(o);
+        else
+            Object.DestroyImmediate(o);
+    }
+}
+
 static class MemoryUtil
 {
     public static NativeArray<T> Array<T>(int length) where T : struct
@@ -37,6 +49,7 @@ static class RenderTextureUtil
       Allocate(int width, int height, RenderTextureFormat format)
     {
         var rt = new RenderTexture(width, height, 0, format);
+        rt.hideFlags = HideFlags.DontSave;
         rt.enableRandomWrite = true;
         rt.Create();
         return rt;

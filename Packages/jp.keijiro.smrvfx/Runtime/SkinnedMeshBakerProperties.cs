@@ -10,7 +10,14 @@ public sealed partial class SkinnedMeshBaker : MonoBehaviour
     [SerializeField] int _pointCount = 65536;
 
     void OnValidate()
-      => _pointCount = Mathf.Max(64, _pointCount);
+    {
+        _pointCount = Mathf.Max(64, _pointCount);
+
+        // We assume that someone changed the values/references in the
+        // serialized fields, so let us dispose the internal objects to
+        // re-initialize them with the new values/references. #BADCODE
+        DisposeInternals();
+    }
 
     #endregion
 
