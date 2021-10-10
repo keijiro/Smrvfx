@@ -97,15 +97,6 @@
       "dependencies": {},
       "url": "https://registry.npmjs.com"
     },
-    "jp.keijiro.smrvfx": {
-      "version": "file:jp.keijiro.smrvfx",
-      "depth": 0,
-      "source": "embedded",
-      "dependencies": {
-        "com.unity.burst": "1.3.4",
-        "com.unity.visualeffectgraph": "8.2.0"
-      }
-    },
     "com.unity.modules.animation": {
       "version": "1.0.0",
       "depth": 1,
