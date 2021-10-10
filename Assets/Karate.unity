@@ -223,20 +223,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!115 &566232890
-MonoScript:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_Name: 
-  serializedVersion: 5
-  m_Script: 
-  m_DefaultReferences: {}
-  m_Icon: {fileID: 0}
-  m_ExecutionOrder: 0
-  m_ClassName: VFXSkinnedMeshBinder
-  m_Namespace: Smrvfx
 --- !u!850595691 &641628841
 LightingSettings:
   m_ObjectHideFlags: 0
@@ -394,20 +380,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!115 &820300143
-MonoScript:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_Name: 
-  serializedVersion: 5
-  m_Script: 
-  m_DefaultReferences: {}
-  m_Icon: {fileID: 0}
-  m_ExecutionOrder: 0
-  m_ClassName: VFXSkinnedMeshBinder
-  m_Namespace: Smrvfx
 --- !u!1 &963999397
 GameObject:
   m_ObjectHideFlags: 0
@@ -420,7 +392,6 @@ GameObject:
   - component: {fileID: 963999400}
   - component: {fileID: 963999399}
   - component: {fileID: 963999402}
-  - component: {fileID: 963999403}
   - component: {fileID: 963999404}
   m_Layer: 0
   m_Name: Particles
@@ -553,33 +524,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_ExecuteInEditor: 1
   m_Bindings:
-  - {fileID: 963999403}
   - {fileID: 963999404}
   m_VisualEffect: {fileID: 963999400}
---- !u!114 &963999403
-MonoBehaviour:
-  m_ObjectHideFlags: 2
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 963999397}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 820300143}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _positionMapProperty:
-    m_Name: PositionMap
-  _bindVelocityMap: 1
-  _velocityMapProperty:
-    m_Name: VelocityMap
-  _bindNormalMap: 0
-  _normalMapProperty:
-    m_Name: NormalMap
-  _bindVertexCount: 0
-  _vertexCountProperty:
-    m_Name: VertexCount
-  Target: {fileID: 0}
 --- !u!114 &963999404
 MonoBehaviour:
   m_ObjectHideFlags: 2
@@ -640,14 +586,14 @@ GameObject:
   - component: {fileID: 1452013106}
   - component: {fileID: 1452013105}
   - component: {fileID: 1452013109}
-  - component: {fileID: 1452013108}
+  - component: {fileID: 1452013110}
   m_Layer: 0
   m_Name: Lines
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!73398921 &1452013105
 VFXRenderer:
   serializedVersion: 1
@@ -656,7 +602,7 @@ VFXRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1452013104}
-  m_Enabled: 0
+  m_Enabled: 1
   m_CastShadows: 0
   m_ReceiveShadows: 0
   m_DynamicOccludee: 1
@@ -708,7 +654,16 @@ VisualEffect:
     m_Vector2f:
       m_Array: []
     m_Vector3f:
-      m_Array: []
+      m_Array:
+      - m_Value: {x: -0, y: 0, z: 0}
+        m_Name: SourceTransform_angles
+        m_Overridden: 1
+      - m_Value: {x: -0.00025689602, y: 0.96993536, z: -0.03246923}
+        m_Name: SourceTransform_position
+        m_Overridden: 1
+      - m_Value: {x: 1, y: 1, z: 1}
+        m_Name: SourceTransform_scale
+        m_Overridden: 1
     m_Vector4f:
       m_Array: []
     m_Uint:
@@ -729,6 +684,9 @@ VisualEffect:
       - m_Value: {fileID: 0}
         m_Name: VelocityMap
         m_Overridden: 1
+      - m_Value: {fileID: 782649403}
+        m_Name: Source
+        m_Overridden: 1
     m_Bool:
       m_Array: []
 --- !u!4 &1452013107
@@ -746,30 +704,6 @@ Transform:
   m_Father: {fileID: 1137820230}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1452013108
-MonoBehaviour:
-  m_ObjectHideFlags: 2
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1452013104}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 566232890}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _positionMapProperty:
-    m_Name: PositionMap
-  _bindVelocityMap: 1
-  _velocityMapProperty:
-    m_Name: VelocityMap
-  _bindNormalMap: 0
-  _normalMapProperty:
-    m_Name: NormalMap
-  _bindVertexCount: 0
-  _vertexCountProperty:
-    m_Name: VertexCount
-  Target: {fileID: 0}
 --- !u!114 &1452013109
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -784,8 +718,23 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_ExecuteInEditor: 1
   m_Bindings:
-  - {fileID: 1452013108}
+  - {fileID: 1452013110}
   m_VisualEffect: {fileID: 1452013106}
+--- !u!114 &1452013110
+MonoBehaviour:
+  m_ObjectHideFlags: 2
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1452013104}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7fdfea1f838247c40921a07afedde962, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Property:
+    m_Name: SourceTransform
+  Target: {fileID: 782649404}
 --- !u!1 &1945436762
 GameObject:
   m_ObjectHideFlags: 0
