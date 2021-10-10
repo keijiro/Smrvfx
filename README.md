@@ -4,53 +4,26 @@ Smrvfx
 ![gif](https://i.imgur.com/HWwnljE.gif)
 ![gif](https://i.imgur.com/Tk1IlOb.gif)
 
-**Smrvfx** is a Unity sample project that shows how to use an animated [skinned
-mesh] as a particle source in a [visual effect graph].
+**Smrvfx** is a Unity sample project that shows how to use the
+[skinned mesh sampling feature] with VFX Graph to emit particles from animating
+characters.
 
-[skinned mesh]: https://docs.unity3d.com/Manual/class-SkinnedMeshRenderer.html
-[visual effect graph]: https://unity.com/visual-effect-graph
+[skinned mesh sampling feature]:
+  https://docs.unity3d.com/Packages/com.unity.visualeffectgraph@12.0/manual/Operator-SampleMesh.html
 
 System Requirements
 -------------------
 
-- Unity 2020.1
+- Unity 2021.2
+- HDRP/URP 12.0
 
-How To Install
---------------
+About this repository
+---------------------
 
-This package uses the [scoped registry] feature to resolve package dependencies.
-Please add the following sections to the manifest file (Packages/manifest.json).
+Previously, this repository contained a custom package called *Smrvfx* that
+implemented mesh sampling feature because VFX Graph didn't provide the feature
+at the time.
 
-[scoped registry]: https://docs.unity3d.com/Manual/upm-scoped.html
-
-To the `scopedRegistries` section:
-
-```
-{
-  "name": "Keijiro",
-  "url": "https://registry.npmjs.com",
-  "scopes": [ "jp.keijiro" ]
-}
-```
-
-To the `dependencies` section:
-
-```
-"jp.keijiro.smrvfx": "1.1.6"
-```
-
-After changes, the manifest file should look like below:
-
-```
-{
-  "scopedRegistries": [
-    {
-      "name": "Keijiro",
-      "url": "https://registry.npmjs.com",
-      "scopes": [ "jp.keijiro" ]
-    }
-  ],
-  "dependencies": {
-    "jp.keijiro.smrvfx": "1.1.6",
-...
-```
+The built-in skinned mesh sampling feature was implemented in HDRP 11.0, so I
+changed the main aim of this repository to provide an example of the built-in
+feature.
