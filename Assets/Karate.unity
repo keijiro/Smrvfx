@@ -828,11 +828,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_ExecuteInEditor: 1
-  m_Bindings: []
+  m_Bindings:
+  - {fileID: 778064509}
   m_VisualEffect: {fileID: 778064507}
 --- !u!137 &782649403 stripped
 SkinnedMeshRenderer:
   m_CorrespondingSourceObject: {fileID: 13700000, guid: b90c72d29781b2b4b9191291ef2e82ec,
+    type: 3}
+  m_PrefabInstance: {fileID: 1962086035}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &782649404 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 400002, guid: b90c72d29781b2b4b9191291ef2e82ec,
     type: 3}
   m_PrefabInstance: {fileID: 1962086035}
   m_PrefabAsset: {fileID: 0}
@@ -978,6 +985,7 @@ GameObject:
   - component: {fileID: 963999399}
   - component: {fileID: 963999402}
   - component: {fileID: 963999403}
+  - component: {fileID: 963999404}
   m_Layer: 0
   m_Name: Particles
   m_TagString: Untagged
@@ -1060,7 +1068,16 @@ VisualEffect:
     m_Vector2f:
       m_Array: []
     m_Vector3f:
-      m_Array: []
+      m_Array:
+      - m_Value: {x: 358.88367, y: 359.50714, z: 359.17828}
+        m_Name: SourceTransform_angles
+        m_Overridden: 1
+      - m_Value: {x: -0.000081272796, y: 0.9142645, z: -0.04111284}
+        m_Name: SourceTransform_position
+        m_Overridden: 1
+      - m_Value: {x: 1, y: 1, z: 1}
+        m_Name: SourceTransform_scale
+        m_Overridden: 1
     m_Vector4f:
       m_Array: []
     m_Uint:
@@ -1081,6 +1098,9 @@ VisualEffect:
       - m_Value: {fileID: 0}
         m_Name: VelocityMap
         m_Overridden: 1
+      - m_Value: {fileID: 782649403}
+        m_Name: Source
+        m_Overridden: 1
     m_Bool:
       m_Array: []
 --- !u!114 &963999402
@@ -1098,6 +1118,7 @@ MonoBehaviour:
   m_ExecuteInEditor: 1
   m_Bindings:
   - {fileID: 963999403}
+  - {fileID: 963999404}
   m_VisualEffect: {fileID: 963999400}
 --- !u!114 &963999403
 MonoBehaviour:
@@ -1123,6 +1144,21 @@ MonoBehaviour:
   _vertexCountProperty:
     m_Name: VertexCount
   Target: {fileID: 1474985324}
+--- !u!114 &963999404
+MonoBehaviour:
+  m_ObjectHideFlags: 2
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 963999397}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7fdfea1f838247c40921a07afedde962, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Property:
+    m_Name: SourceTransform
+  Target: {fileID: 782649404}
 --- !u!1 &1452013104
 GameObject:
   m_ObjectHideFlags: 0
