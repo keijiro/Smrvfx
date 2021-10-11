@@ -11,7 +11,7 @@ characters.
 [skinned mesh sampling feature]:
   https://docs.unity3d.com/Packages/com.unity.visualeffectgraph@12.0/manual/Operator-SampleMesh.html
 
-System Requirements
+System requirements
 -------------------
 
 - Unity 2021.2
@@ -21,8 +21,8 @@ About this repository
 ---------------------
 
 Previously, this repository contained a custom package called *Smrvfx* that
-implemented mesh sampling feature because VFX Graph didn't provide the feature
-at the time.
+implemented a mesh sampling feature as VFX Graph didn't provide the feature at
+the time.
 
 The built-in skinned mesh sampling feature was implemented in HDRP 11.0, so I
 changed the main aim of this repository to provide an example of the built-in
