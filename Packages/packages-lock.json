@@ -22,8 +22,7 @@
       "source": "builtin",
       "dependencies": {
         "com.unity.ugui": "1.0.0",
-        "com.unity.modules.physics": "1.0.0",
-        "com.unity.modules.jsonserialize": "1.0.0"
+        "com.unity.modules.physics": "1.0.0"
       }
     },
     "com.unity.render-pipelines.universal": {
@@ -38,7 +37,7 @@
       }
     },
     "com.unity.searcher": {
-      "version": "4.9.0",
+      "version": "4.8.0",
       "depth": 2,
       "source": "registry",
       "dependencies": {},
@@ -50,7 +49,7 @@
       "source": "builtin",
       "dependencies": {
         "com.unity.render-pipelines.core": "12.0.0",
-        "com.unity.searcher": "4.9.0"
+        "com.unity.searcher": "4.8.0"
       }
     },
     "com.unity.timeline": {
@@ -126,7 +125,7 @@
     },
     "com.unity.modules.jsonserialize": {
       "version": "1.0.0",
-      "depth": 2,
+      "depth": 0,
       "source": "builtin",
       "dependencies": {}
     },
